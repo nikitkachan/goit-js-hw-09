@@ -51,5 +51,5 @@ function convertMs(ms) {
 };
 
 function addLeadingZero(value) {
-    return padStart();
+    padStart();
 }
