@@ -16,9 +16,6 @@ hours.style.fontSize = "48px";
 minutes.style.fontSize = "48px";
 seconds.style.fontSize = "48px";
 
-
-console.log(timer);
-
 buttonStart.setAttribute("disabled", "true");
 
 const options = {
