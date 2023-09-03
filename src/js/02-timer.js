@@ -1,6 +1,5 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import Notiflix from "notiflix";3
 
 const buttonStart = document.querySelector("button");
 const inputPicker = document.getElementById("datetime-picker");
@@ -31,7 +30,7 @@ const options = {
         console.log(selectedDates[0]);
         
         if (selectedDates[0] < options.defaultDate) {
-            Notiflix.Notify.warning('Memento te hominem esse');
+            alert("Please choose a date in the future");
             buttonStart.setAttribute("disabled", "true");
         };
         if (selectedDates[0] > options.defaultDate) {
