@@ -1,9 +1,27 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import Notiflix from "notiflix";
 
 const buttonStart = document.querySelector("button");
 const inputPicker = document.getElementById("datetime-picker");
+const days = document.querySelector("span[data-days]");
+const hours = document.querySelector("span[data-hours]");
+const minutes = document.querySelector("span[data-minutes]");
+const seconds = document.querySelector("span[data-seconds]");
+const timer = document.querySelector(".timer");
+timer.style.display = "flex";
+timer.style.gap = "16px";
+timer.style.fontSize = "24px";
+days.style.fontSize = "48px";
+hours.style.fontSize = "48px";
+minutes.style.fontSize = "48px";
+seconds.style.fontSize = "48px";
+
+
+console.log(timer);
+
 buttonStart.setAttribute("disabled", "true");
+
 const options = {
     enableTime: true,
     time_24hr: true,
@@ -11,22 +29,37 @@ const options = {
     minuteIncrement: 1,
     onClose(selectedDates) {
         console.log(selectedDates[0]);
-        if (selectedDates[0] < date) {
-            alert("Please choose a date in the future");
+        
+        if (selectedDates[0] < options.defaultDate) {
+            Notiflix.Notify.warning('Memento te hominem esse');
             buttonStart.setAttribute("disabled", "true");
         };
-        if (selectedDates[0] > date) {
+        if (selectedDates[0] > options.defaultDate) {
             buttonStart.removeAttribute("disabled");
         };
-        const selectedTime = selectedDates[0] - date;
+           
+        buttonStart.addEventListener("click", onClickStart);
+
+        function onClickStart() {
+   
+        const interval = setInterval(() => {
+            let selectedTime = selectedDates[0] - new Date();
+            let selectedTimeMs = convertMs(selectedTime); 
+
+        days.textContent = addLeadingZero(selectedTimeMs.days);
+        hours.textContent = addLeadingZero(selectedTimeMs.hours);
+        minutes.textContent = addLeadingZero(selectedTimeMs.minutes);
+        seconds.textContent = addLeadingZero(selectedTimeMs.seconds);
+            
+        if (selectedTime <= 1000) {
+                clearInterval(interval);
+            }
+        }, 1000);
+            
+        buttonStart.setAttribute("disabled", "true");
+        inputPicker.setAttribute("disabled", "true")
+        };
     },
-};
-const date = new Date();
-
-buttonStart.addEventListener("click", onClickStart);
-
-function onClickStart() {
-    const timerId = setInterval(callback, 1000);
 };
 
 flatpickr(inputPicker, options);
@@ -51,5 +84,5 @@ function convertMs(ms) {
 };
 
 function addLeadingZero(value) {
-    padStart();
-}
+    return value.toString().padStart(2, "0");
+};
