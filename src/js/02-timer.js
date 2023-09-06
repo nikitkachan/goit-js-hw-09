@@ -19,6 +19,8 @@ seconds.style.fontSize = "48px";
 
 buttonStart.setAttribute("disabled", "true");
 
+let userTime = null;
+
 const options = {
     enableTime: true,
     time_24hr: true,
@@ -28,34 +30,15 @@ const options = {
         console.log(selectedDates[0]);
         
         if (selectedDates[0] < options.defaultDate) {
-            Notiflix.Notify.warning("Please choose a date in the future");
+            Notiflix.Notify.failure("Please choose a date in the future");
             buttonStart.setAttribute("disabled", "true");
         };
         if (selectedDates[0] > options.defaultDate) {
             buttonStart.removeAttribute("disabled");
         };
-           
-        buttonStart.addEventListener("click", onClickStart);
-
-        function onClickStart() {
-   
-        const interval = setInterval(() => {
-            let selectedTime = selectedDates[0] - new Date();
-            let selectedTimeMs = convertMs(selectedTime); 
-
-        days.textContent = addLeadingZero(selectedTimeMs.days);
-        hours.textContent = addLeadingZero(selectedTimeMs.hours);
-        minutes.textContent = addLeadingZero(selectedTimeMs.minutes);
-        seconds.textContent = addLeadingZero(selectedTimeMs.seconds);
-            
-        if (selectedTime <= 1000) {
-                clearInterval(interval);
-            }
-        }, 1000);
-            
-        buttonStart.setAttribute("disabled", "true");
-        inputPicker.setAttribute("disabled", "true")
-        };
+        
+        userTime = selectedDates[0];
+        
     },
 };
 
@@ -82,4 +65,26 @@ function convertMs(ms) {
 
 function addLeadingZero(value) {
     return value.toString().padStart(2, "0");
+};
+
+buttonStart.addEventListener("click", onClickStart);
+
+function onClickStart() {
+   
+    const interval = setInterval(() => {
+        let selectedTime = userTime - new Date();
+        let selectedTimeMs = convertMs(selectedTime); 
+
+    days.textContent = addLeadingZero(selectedTimeMs.days);
+    hours.textContent = addLeadingZero(selectedTimeMs.hours);
+    minutes.textContent = addLeadingZero(selectedTimeMs.minutes);
+    seconds.textContent = addLeadingZero(selectedTimeMs.seconds);
+        
+    if (selectedTime <= 1000) {
+            clearInterval(interval);
+        }
+    }, 1000);
+        
+    buttonStart.setAttribute("disabled", "true");
+    inputPicker.setAttribute("disabled", "true")
 };

@@ -18,21 +18,26 @@ const form = document.querySelector("form");
 form.addEventListener("submit", onSubmitClick);
 
 function onSubmitClick(event) {
-const firstDelay = Number(form[0].value);
-const delayStep = Number(form[1].value);
-const amount = Number(form[2].value);
+ event.preventDefault();
 
-  event.preventDefault();
+  const firstDelay = Number(form[0].value);
+  const delayStep = Number(form[1].value);
+  const amount = Number(form[2].value);
+
+if (firstDelay<0 || delayStep<0 || amount<=0) {
+  Notiflix.Notify.failure("Wrong!");
+  return;
+  };
   
   for (let i = 1; i <= amount; i++) {
-    let delay = firstDelay + delayStep * (i - 1);
+      let delay = firstDelay + delayStep * (i - 1);
 
-    createPromise(i, delay)
-      .then(({ position, delay }) => {
-        Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
-      })
-      .catch(({ position, delay }) => {
-        Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
-      });
-  };
+      createPromise(i, delay)
+        .then(({ position, delay }) => {
+          Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+        })
+        .catch(({ position, delay }) => {
+          Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
+        });
+    };
 };
